@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "../../axios";
 import { Link, useNavigate } from "react-router-dom";
 
+import image from "../../assets/img/annie-spratt-jY9mXvA15W0-unsplash.jpg";
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -38,7 +40,14 @@ const Login = () => {
 
   return (
     <div className="row" style={{ height: "100vh", overflow: "hidden" }}>
-      <div className="col-12 col-md-6 bg-dark"></div>
+      <div
+        className="col-12 col-md-6 "
+        style={{
+          background: `url(${image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></div>
       <div
         className="col-12 col-md-6 d-flex justify-content-center align-items-center"
         style={{ flexDirection: "column" }}

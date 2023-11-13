@@ -26,6 +26,10 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import EmailSent from "./pages/Auth/EmailSent";
 import EmailCode from "./pages/Auth/EmailCode";
 import ChangePassword from "./pages/Auth/ChangePassword";
+import Home from "./pages/Home/Home";
+import TournamentsPublic from "./pages/Home/Tournaments";
+import TeamsPublic from "./pages/Home/Teams";
+import PlayersPublic from "./pages/Home/Players";
 
 // export const HOST = "http://localhost:5000/api";
 
@@ -75,7 +79,10 @@ const App = () => {
         <Routes>
           <Route path="/*">
             {/* Static routes */}
-            <Route index element={<>Hello World</>} />
+            <Route index element={<Home />} />
+            <Route path="home/tournaments" element={<TournamentsPublic />} />
+            <Route path="home/teams" element={<TeamsPublic />} />
+            <Route path="home/players" element={<PlayersPublic />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="forgot-password" element={<ForgotPassword />} />

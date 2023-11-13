@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "../../axios";
 import { useNavigate, useParams } from "react-router-dom";
 
+import image from "../../assets/img/connor-coyne-OgqWLzWRSaI-unsplash.jpg";
+
 const EmailCode = () => {
   const { email, code } = useParams();
 
@@ -29,7 +31,14 @@ const EmailCode = () => {
 
   return (
     <div className="row" style={{ height: "100vh", overflow: "hidden" }}>
-      <div className="col-12 col-md-6 bg-dark"></div>
+      <div
+        className="col-12 col-md-6"
+        style={{
+          background: `url(${image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></div>
       <div
         className="col-12 col-md-6 d-flex justify-content-center align-items-center"
         style={{ flexDirection: "column" }}

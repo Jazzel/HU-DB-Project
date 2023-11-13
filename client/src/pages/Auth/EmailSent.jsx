@@ -1,9 +1,18 @@
 import React from "react";
 
+import image from "../../assets/img/felipe-giacometti-4i5ToPi4K_c-unsplash.jpg";
+
 const EmailSent = () => {
   return (
     <div className="row" style={{ height: "100vh", overflow: "hidden" }}>
-      <div className="col-12 col-md-6 bg-dark"></div>
+      <div
+        className="col-12 col-md-6"
+        style={{
+          background: `url(${image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      ></div>
       <div
         className="col-12 col-md-6 d-flex justify-content-center align-items-center"
         style={{ flexDirection: "column" }}
