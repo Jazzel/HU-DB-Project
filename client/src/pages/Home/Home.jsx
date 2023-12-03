@@ -1,6 +1,8 @@
 import React from "react";
 import Layout from "../../components/Home/Layout";
 
+import image from "../../assets/img/annie-spratt-jY9mXvA15W0-unsplash2.jpg";
+
 const Home = () => {
   const matches = [
     {
@@ -35,7 +37,15 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="row bg-dark mb-4" style={{ height: 500 }}></div>
+      <div
+        className="row mb-4"
+        style={{
+          height: 600,
+          background: `url(${image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+        }}
+      ></div>
       <div className="row">
         <div className="col-12 col-md-8">
           <h3>Current Matches</h3>

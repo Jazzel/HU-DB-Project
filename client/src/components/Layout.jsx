@@ -17,7 +17,9 @@ const Layout = ({ children, activeLink }) => {
                   {activeLink}
                 </Link>
               </div>
-              <button onClick={() => logOut()}>Logout</button>
+              <button className="btn text-white" onClick={() => logOut()}>
+                Logout
+              </button>
             </div>
           </nav>
           <section className="container p-4">
