@@ -46,7 +46,7 @@ const Players = () => {
         >
           <Link to="/players/add" className="btn btn-dark m-1">
             <FontAwesomeIcon icon={faAdd} style={{ marginRight: 5 }} />
-            Add more plauers
+            Add more players
           </Link>
         </div>
         <hr />
@@ -72,7 +72,13 @@ const Players = () => {
                 <td>{player.age}</td>
                 <td>{player.city}</td>
                 <td>
-                  <button className="btn btn-dark btn-sm">View</button> |{" "}
+                  <Link
+                    to={`/players/${player.id}/true`}
+                    className="btn btn-dark btn-sm"
+                  >
+                    View
+                  </Link>{" "}
+                  |{" "}
                   <Link
                     to={`/players/edit/${player.id}`}
                     className="btn btn-warning btn-sm"

@@ -17,11 +17,12 @@ const PlayerForm = () => {
       const responseCity = await axios.get(`/cities/`);
       const responseTeams = await axios.get(`/teams/`);
       if (id) {
+        console.log(id);
         const response = await axios.get(`/players/${id}`);
         setFormData({
           ...response.data,
-          city: response.data.city.id,
-          team: response.data.team.id,
+          city: response.data.city,
+          team: response.data.team,
         });
       }
       setCities(responseCity.data);
@@ -73,7 +74,7 @@ const PlayerForm = () => {
           <h1>Players | {!id ? "Add" : viewOnly ? "Details" : "Edit"}</h1>
         </div>
         <div className="col-3 d-flex justify-content-end align-items-center">
-          <Link to="/players" className="btn btn-outline-dark mr-0">
+          <Link to="/players" className="btn btn-outline-light mr-0">
             <FontAwesomeIcon icon={faChevronLeft} /> Go Back
           </Link>
         </div>
@@ -118,7 +119,11 @@ const PlayerForm = () => {
           >
             <option value={""}>Select team</option>
             {teams.map((team) => (
-              <option key={team.id} value={team.id}>
+              <option
+                selected={formData.team === team.id}
+                key={team.id}
+                value={team.id}
+              >
                 {team.name}
               </option>
             ))}
@@ -149,7 +154,11 @@ const PlayerForm = () => {
           >
             <option value={""}>Select city</option>
             {cities.map((city) => (
-              <option key={city.id} value={city.id}>
+              <option
+                selected={formData.city === city.id}
+                key={city.id}
+                value={city.id}
+              >
                 {city.name}
               </option>
             ))}

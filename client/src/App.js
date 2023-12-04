@@ -30,6 +30,8 @@ import Home from "./pages/Home/Home";
 import TournamentsPublic from "./pages/Home/Tournaments";
 import TeamsPublic from "./pages/Home/Teams";
 import PlayersPublic from "./pages/Home/Players";
+import MatchDetails from "./pages/Matches/MatchDetails";
+import PlayerDetails from "./pages/Matches/PlayerDetails";
 
 // export const HOST = "http://localhost:5000/api";
 
@@ -64,12 +66,12 @@ export const logOut = () => {
 };
 
 const PrivateRoute = ({ children }) => {
-  // const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  // if (user && user.isAuthenticated) {
-  return <>{children}</>;
-  // }
-  // return <Navigate to="/login" replace />;
+  if (user && user.isAuthenticated) {
+    return <>{children}</>;
+  }
+  return <Navigate to="/login" replace />;
 };
 
 const App = () => {
@@ -79,7 +81,7 @@ const App = () => {
         <Routes>
           <Route path="/*">
             {/* Static routes */}
-            <Route index element={<Home />} />
+            <Route index element={<Login />} />
             <Route path="home/tournaments" element={<TournamentsPublic />} />
             <Route path="home/teams" element={<TeamsPublic />} />
             <Route path="home/players" element={<PlayersPublic />} />
@@ -180,6 +182,14 @@ const App = () => {
               }
             />
             <Route
+              path="tournaments/:id/:viewOnly"
+              element={
+                <PrivateRoute>
+                  <TournamentForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="tournaments/add"
               element={
                 <PrivateRoute>
@@ -212,6 +222,14 @@ const App = () => {
               }
             />
             <Route
+              path="teams/:id/:viewOnly"
+              element={
+                <PrivateRoute>
+                  <TeamForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="teams/edit/:id"
               element={
                 <PrivateRoute>
@@ -236,6 +254,14 @@ const App = () => {
               }
             />
             <Route
+              path="players/:id/:viewOnly"
+              element={
+                <PrivateRoute>
+                  <PlayerForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="players/edit/:id"
               element={
                 <PrivateRoute>
@@ -252,6 +278,14 @@ const App = () => {
               }
             />
             <Route
+              path="matches/:id/:viewOnly"
+              element={
+                <PrivateRoute>
+                  <MatchForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
               path="matches/add"
               element={
                 <PrivateRoute>
@@ -264,6 +298,22 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <MatchForm />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="matches/:id/matchDetails"
+              element={
+                <PrivateRoute>
+                  <MatchDetails />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="matches/:id/:team_id/:player_id/playerDetails"
+              element={
+                <PrivateRoute>
+                  <PlayerDetails />
                 </PrivateRoute>
               }
             />

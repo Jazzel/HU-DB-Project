@@ -10,8 +10,12 @@ import { Link } from "react-router-dom";
 const Sports = () => {
   const [sports, setSports] = useState([]);
   const getData = async () => {
-    const response = await axios.get(`/sports`);
-    setSports(response.data);
+    try {
+      const response = await axios.get(`/sports`);
+      setSports(response.data);
+    } catch (err) {
+      alert(err);
+    }
   };
   useEffect(() => {
     getData();

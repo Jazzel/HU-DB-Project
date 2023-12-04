@@ -4,7 +4,8 @@ const { check, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-
+const connectDB = require("./../config/db");
+const sql = require("mssql");
 const secretToken = config.get("JWTsecretToken");
 
 // generate random code
@@ -42,10 +43,15 @@ router.post(
     const { name, email, password, role } = req.body;
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       // See if user exists
       const result = await sql.query(
-        `SELECT * FROM Users WHERE email = ${email}`
+        `SELECT * FROM Users WHERE email = '${email}'`
       );
+
+      console.log("dsad");
 
       let user = result.recordset[0];
 
@@ -56,12 +62,14 @@ router.post(
 
       // Encrypt password
       const salt = await bcrypt.genSalt(10);
-      const password = await bcrypt.hash(password, salt);
+      let genPassword = await bcrypt.hash(password, salt);
+
+      const code = generateCode();
 
       const result2 = await sql.query(`
-      INSERT INTO Users (name, email, password, role, code, description) 
+      INSERT INTO Users (name, email, password, role, code) 
       OUTPUT INSERTED.id
-      VALUES ('${req.body.name}', '${req.email}', '${req.password}', '${req.role}', '${req.code}', '${req.description}')
+      VALUES ('${req.body.name}', '${req.body.email}', '${genPassword}', '${req.body.role}', '${code}')
     `);
 
       // Check if recordset is undefined or empty
@@ -92,6 +100,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );
@@ -114,9 +125,12 @@ router.post(
     const { email, password } = req.body;
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       // See if user exists
       const result = await sql.query(
-        `SELECT email, password FROM Users WHERE email = ${email}`
+        `SELECT email, password FROM Users WHERE email = '${email}'`
       );
 
       let user = result.recordset[0];
@@ -152,6 +166,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );

@@ -19,7 +19,7 @@ const CityForm = () => {
       const responseCountry = await axios.get(`/countries`);
       if (id) {
         const response = await axios.get(`/cities/${id}`);
-        setFormData({ ...response.data, country: response.data.country.id });
+        setFormData({ ...response.data, country: response.data.country });
       }
 
       setCountries(responseCountry.data);
@@ -64,7 +64,7 @@ const CityForm = () => {
           <h1>Cities | {!id ? "Add" : viewOnly ? "Details" : "Edit"}</h1>
         </div>
         <div className="col-3 d-flex justify-content-end align-items-center">
-          <Link to="/countries" className="btn btn-outline-dark mr-0">
+          <Link to="/countries" className="btn btn-outline-light mr-0">
             <FontAwesomeIcon icon={faChevronLeft} /> Go Back
           </Link>
         </div>
@@ -95,7 +95,11 @@ const CityForm = () => {
           >
             <option value={""}>Select Country</option>
             {countries.map((country) => (
-              <option key={country.id} value={country.id}>
+              <option
+                key={country.id}
+                selected={formData.country === country.id}
+                value={country.id}
+              >
                 {country.name}
               </option>
             ))}

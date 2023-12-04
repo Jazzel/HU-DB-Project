@@ -15,7 +15,7 @@ const TeamForm = () => {
       const responseCountry = await axios.get(`/countries`);
       if (id) {
         const response = await axios.get(`/teams/${id}`);
-        setFormData({ ...response.data, country: response.data.country.id });
+        setFormData({ ...response.data, country: response.data.country });
       }
       setCountries(responseCountry.data);
     } catch (error) {
@@ -44,7 +44,7 @@ const TeamForm = () => {
     if (!id) {
       response = await axios.post(`/teams`, formData);
     } else {
-      response = await axios.put(`/teams/${formData.id}`, formData);
+      response = await axios.put(`/teams/${id}`, formData);
     }
     if (response.status === 200) {
       alert(id ? "Team updated !" : "Team added !");
@@ -64,7 +64,7 @@ const TeamForm = () => {
           <h1>Teams | {!id ? "Add" : viewOnly ? "Details" : "Edit"}</h1>
         </div>
         <div className="col-3 d-flex justify-content-end align-items-center">
-          <Link to="/teams" className="btn btn-outline-dark mr-0">
+          <Link to="/teams" className="btn btn-outline-light mr-0">
             <FontAwesomeIcon icon={faChevronLeft} /> Go Back
           </Link>
         </div>
@@ -98,7 +98,7 @@ const TeamForm = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">Country</label>
+          <label className="form-label">Country {formData.country}</label>
           <select
             className="form-control"
             required
@@ -108,7 +108,11 @@ const TeamForm = () => {
           >
             <option value={""}>Select Country</option>
             {countries.map((country) => (
-              <option key={country.id} value={country.id}>
+              <option
+                selected={formData.country === country.id}
+                key={country.id}
+                value={country.id}
+              >
                 {country.name}
               </option>
             ))}

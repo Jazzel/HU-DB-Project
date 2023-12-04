@@ -15,23 +15,28 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await axios.post("/auth/", formData);
+    try {
+      const response = await axios.post("/users/login", formData);
 
-    if (response.status === 200) {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: response.data.name,
-          email: response.data.email,
-          role: response.data.role,
-          token: response.data.token,
-          isAuthenticated: true,
-        })
-      );
+      if (response.status === 200) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: response.data.name,
+            email: response.data.email,
+            role: response.data.role,
+            token: response.data.token,
+            isAuthenticated: true,
+          })
+        );
 
-      navigate("/dashboard");
-    } else {
+        navigate("/dashboard");
+      } else {
+        alert("Invalid credentials !");
+      }
+    } catch (error) {
       alert("Invalid credentials !");
+      console.log(error);
     }
   };
 
@@ -92,13 +97,6 @@ const Login = () => {
           <button type="submit" className="btn btn-dark w-100">
             Login
           </button>
-          <center>
-            <small>
-              <Link className="text-dark" to="/forgot-password">
-                Forgot password? Click here.
-              </Link>
-            </small>
-          </center>
         </form>
       </div>
     </div>

@@ -16,7 +16,8 @@ const TournamentForm = () => {
       const responseSports = await axios.get(`/sports`);
       if (id) {
         const response = await axios.get(`/tournaments/${id}`);
-        setFormData({ ...response.data, sport: response.data.sport.id });
+        setFormData({ ...response.data, sport: response.data.sport });
+        console.log(response.data);
       }
       setSports(responseSports.data);
     } catch (error) {
@@ -36,6 +37,7 @@ const TournamentForm = () => {
     start_date: "",
     end_date: "",
     description: "",
+    managed_by: 1,
   });
 
   const onSubmit = async (e) => {
@@ -65,7 +67,7 @@ const TournamentForm = () => {
           <h1>Tournaments | {!id ? "Add" : viewOnly ? "Details" : "Edit"}</h1>
         </div>
         <div className="col-3 d-flex justify-content-end align-items-center">
-          <Link to="/tournaments" className="btn btn-outline-dark mr-0">
+          <Link to="/tournaments" className="btn btn-outline-light mr-0">
             <FontAwesomeIcon icon={faChevronLeft} /> Go Back
           </Link>
         </div>
@@ -94,9 +96,13 @@ const TournamentForm = () => {
             value={formData.sport}
             onChange={(e) => onChange(e)}
           >
-            <option value={""}>Select Country</option>
+            <option value={""}>Select sport</option>
             {sports.map((sport) => (
-              <option key={sport.id} value={sport.id}>
+              <option
+                selected={formData.sport === sport.id}
+                key={sport.id}
+                value={sport.id}
+              >
                 {sport.name}
               </option>
             ))}

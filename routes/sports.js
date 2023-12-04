@@ -2,17 +2,24 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const sql = require("mssql");
+const connectDB = require("./../config/db");
 
 // @route    GET api/sports
 // @desc     Get all sports
 // @access   Public
 router.get("/", async (req, res) => {
   try {
-    const result = await sql.query("SELECT * FROM Sports");
+    // Ensure the database connection is established
+    await connectDB();
+
+    const result = await sql.query("SELECT * FROM Sports  ORDER BY id DESC");
     return res.json(result.recordset);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -32,6 +39,9 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       const result = await sql.query(`
         INSERT INTO sports (name, description) 
         OUTPUT INSERTED.id
@@ -53,6 +63,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server Error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );
@@ -62,6 +75,9 @@ router.post(
 // @access   Public
 router.get("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     // Ensure the database connection is established
     const result = await sql.query(
       `SELECT * FROM sports WHERE id = ${req.params.id}`
@@ -75,10 +91,10 @@ router.get("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
 
-    if (err.kind === "ObjectId")
-      return res.status(404).json({ msg: "Sport not found" });
-
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -87,6 +103,9 @@ router.get("/:id", async (req, res) => {
 // @access   Private
 router.delete("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `DELETE FROM sports WHERE id = ${req.params.id}`
     );
@@ -97,10 +116,10 @@ router.delete("/:id", async (req, res) => {
     return res.json({ msg: "Sport removed" });
   } catch (err) {
     console.error(err.message);
-    if (err.kind === "ObjectId")
-      return res.status(404).json({ msg: "Sport not found" });
-
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -109,6 +128,9 @@ router.delete("/:id", async (req, res) => {
 // @access   Private
 router.put("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `UPDATE sports SET name = '${req.body.name}', description = '${req.body.description}' WHERE id = ${req.params.id}`
     );
@@ -126,6 +148,9 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 

@@ -6,6 +6,7 @@
   "author": "Muhammad Jazzel Mehmood <jazzelmehmood4@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "concurrently": "^8.2.2",
     "config": "^3.3.9",
     "cors": "^2.8.5",

@@ -68,11 +68,17 @@ const Tournaments = () => {
                 <tr key={tournament.id}>
                   <td>{index + 1}</td>
                   <td>{tournament.name}</td>
-                  <td>{tournament.sport.name}</td>
+                  <td>{tournament.sport}</td>
                   <td>{fixDate(tournament.start_date)}</td>
                   <td>{fixDate(tournament.end_date)}</td>
                   <td>
-                    <button className="btn btn-dark btn-sm">View</button> |{" "}
+                    <Link
+                      to={`/tournaments/${tournament.id}/true`}
+                      className="btn btn-dark btn-sm"
+                    >
+                      View
+                    </Link>{" "}
+                    |{" "}
                     <Link
                       to={`/tournaments/edit/${tournament.id}`}
                       className="btn btn-warning btn-sm"

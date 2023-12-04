@@ -16,26 +16,30 @@ const Register = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await axios.post("/users/register", formData);
 
-    const response = await axios.post("/users/", formData);
+      if (response.status === 200) {
+        alert("User registered !");
 
-    if (response.status === 200) {
-      alert("User registered !");
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            role: formData.role,
+            token: response.data.token,
+            isAuthenticated: true,
+          })
+        );
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          role: formData.role,
-          token: response.data.token,
-          isAuthenticated: true,
-        })
-      );
-
-      navigate("/dashboard");
-    } else {
-      alert("Something went wrong !");
+        navigate("/dashboard");
+      } else {
+        alert("Something went wrong !");
+      }
+    } catch (err) {
+      console.log(err);
+      alert(err?.response?.data?.errors[0]?.msg);
     }
   };
 

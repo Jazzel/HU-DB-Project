@@ -10,9 +10,13 @@ const SportForm = () => {
   const { id, viewOnly } = useParams();
 
   const getData = async () => {
-    if (id) {
-      const response = await axios.get(`/sports/${id}`);
-      setFormData({ ...response.data });
+    try {
+      if (id) {
+        const response = await axios.get(`/sports/${id}`);
+        setFormData({ ...response.data });
+      }
+    } catch (err) {
+      alert(err);
     }
   };
 
@@ -54,7 +58,7 @@ const SportForm = () => {
           <h1>Sports | {!id ? "Add" : viewOnly ? "Details" : "Edit"}</h1>
         </div>
         <div className="col-3 d-flex justify-content-end align-items-center">
-          <Link to="/sports" className="btn btn-outline-dark mr-0">
+          <Link to="/sports" className="btn btn-outline-light mr-0">
             <FontAwesomeIcon icon={faChevronLeft} /> Go Back
           </Link>
         </div>

@@ -71,7 +71,13 @@ const Teams = () => {
                   <td>{team.country}</td>
                   <td>{team.state}</td>
                   <td>
-                    <button className="btn btn-dark btn-sm">View</button> |{" "}
+                    <Link
+                      to={`/teams/${team.id}/true`}
+                      className="btn btn-dark btn-sm"
+                    >
+                      View
+                    </Link>{" "}
+                    |{" "}
                     <Link
                       to={`/teams/edit/${team.id}`}
                       className="btn btn-warning btn-sm"

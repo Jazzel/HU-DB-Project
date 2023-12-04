@@ -28,7 +28,7 @@ const Matches = () => {
       const response = await axios.delete(`/matches/${id}`);
 
       if (response.status === 200) {
-        alert("Sport Deleted !");
+        alert("Match Deleted !");
         getData();
       }
     }
@@ -55,7 +55,7 @@ const Matches = () => {
           <tr>
             <th>Id</th>
             <th>Name</th>
-            <th>Timestamp</th>
+            <th>Date</th>
             <th>Venue</th>
             <th>Tournament</th>
             <th>Winner</th>
@@ -65,24 +65,30 @@ const Matches = () => {
         <tbody>
           {matches.length > 0 &&
             matches.map((match, index) => (
-              <tr key={match._id}>
+              <tr key={match.id}>
                 <td>{index + 1}</td>
                 <td>{match.name}</td>
-                <td>{fixDate(match.timestamp)}</td>
+                <td>{fixDate(match.date)}</td>
                 <td>{match.venue}</td>
                 <td>{match.tournament}</td>
-                <td>{match.winner?.name}</td>
+                <td>{match.winner}</td>
                 <td>
-                  <button className="btn btn-dark btn-sm">View</button> |{" "}
                   <Link
-                    to={`/matches/edit/${match._id}`}
+                    to={`/matches/${match.id}/true`}
+                    className="btn btn-dark btn-sm"
+                  >
+                    View
+                  </Link>{" "}
+                  |{" "}
+                  <Link
+                    to={`/matches/edit/${match.id}`}
                     className="btn btn-warning btn-sm"
                   >
                     Edit
                   </Link>{" "}
                   |{" "}
                   <button
-                    onClick={() => handleDelete(match._id)}
+                    onClick={() => handleDelete(match.id)}
                     className="btn btn-danger btn-sm"
                   >
                     Delete

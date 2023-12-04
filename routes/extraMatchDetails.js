@@ -2,17 +2,24 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const sql = require("mssql");
+const connectDB = require("./../config/db");
 
 // @route    GET api/extraMatchDetail
 // @desc     Get all extraMatchDetail
 // @access   Public
 router.get("/", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query("SELECT * FROM ExtraMatchDetails");
     return res.json(result.recordset);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -33,6 +40,9 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       const result = await sql.query(`
         INSERT INTO extraMatchDetails (match_details, field, value) 
         OUTPUT INSERTED.id
@@ -55,6 +65,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server Error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );
@@ -64,6 +77,9 @@ router.post(
 // @access   Public
 router.get("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     // Ensure the database connection is established
     const result = await sql.query(
       `SELECT * FROM ExtraMatchDetails WHERE id = ${req.params.id}`
@@ -79,6 +95,9 @@ router.get("/:id", async (req, res) => {
     console.error(err.message);
 
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -87,6 +106,9 @@ router.get("/:id", async (req, res) => {
 // @access   Private
 router.delete("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `DELETE FROM ExtraMatchDetails WHERE id = ${req.params.id}`
     );
@@ -98,6 +120,9 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -106,6 +131,9 @@ router.delete("/:id", async (req, res) => {
 // @access   Private
 router.put("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `UPDATE extraMatchDetails SET 
         match_details = '${req.body.match_details}',
@@ -128,6 +156,9 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 

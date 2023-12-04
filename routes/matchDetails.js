@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const connectDB = require("./../config/db");
 const sql = require("mssql");
 
 // @route    GET api/matchDetail
@@ -8,11 +9,17 @@ const sql = require("mssql");
 // @access   Public
 router.get("/", async (req, res) => {
   try {
-    const result = await sql.query("SELECT * FROM MatchDetails");
+    // Ensure the database connection is established
+    await connectDB();
+
+    const result = await sql.query("SELECT * FROM Match_Details");
     return res.json(result.recordset);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -34,10 +41,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       const result = await sql.query(`
-        INSERT INTO MatchDetails (match, player, score, description) 
+        INSERT INTO Match_Details (match, player, score, description) 
         OUTPUT INSERTED.id
-        VALUES ('${req.body.match}', '${req.player}', '${req.score}', '${req.description}')
+        VALUES ('${req.body.match}', '${req.body.player}', '${req.body.score}', '${req.body.description}')
       `);
 
       // Check if recordset is undefined or empty
@@ -57,6 +67,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server Error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );
@@ -64,12 +77,17 @@ router.post(
 // @route    GET api/matchDetail/:id
 // @desc     Get matchDetail by ID
 // @access   Public
-router.get("/:id", async (req, res) => {
+router.get("/:id/:player_id", async (req, res) => {
   try {
     // Ensure the database connection is established
+    await connectDB();
+
+    // Ensure the database connection is established
     const result = await sql.query(
-      `SELECT * FROM MatchDetails WHERE id = ${req.params.id}`
+      `SELECT * FROM Match_Details WHERE match = '${req.params.id}' AND player = '${req.params.player_id}'`
     );
+
+    console.log(req.params);
 
     const matchDetail = result.recordset[0];
 
@@ -81,6 +99,9 @@ router.get("/:id", async (req, res) => {
     console.error(err.message);
 
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -89,8 +110,11 @@ router.get("/:id", async (req, res) => {
 // @access   Private
 router.delete("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
-      `DELETE FROM MatchDetails WHERE id = ${req.params.id}`
+      `DELETE FROM Match_Details WHERE id = ${req.params.id}`
     );
 
     if (result.rowsAffected[0] === 0)
@@ -100,21 +124,27 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
 // @route    PUT api/matchDetail/:id
 // @desc     Update a matchDetail
 // @access   Private
-router.put("/:id", async (req, res) => {
+router.put("/:id/:player_id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
-      `UPDATE MatchDetails SET 
+      `UPDATE Match_Details SET 
         match = '${req.body.match}',
         player = '${req.body.player}',
         score = '${req.body.score}',
         description = '${req.body.description}'
-       WHERE id = ${req.params.id}`
+       WHERE match = ${req.params.id} AND player = ${req.params.player_id}`
     );
 
     if (result.rowsAffected[0] === 0)
@@ -132,6 +162,9 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const connectDB = require("./../config/db");
 const sql = require("mssql");
 
 // @route    GET api/city
@@ -8,11 +9,20 @@ const sql = require("mssql");
 // @access   Public
 router.get("/", async (req, res) => {
   try {
-    const result = await sql.query("SELECT * FROM Cities");
+    // Ensure the database connection is established
+    await connectDB();
+
+    const result = await sql.query(
+      "SELECT Ci.id, Ci.name, Co.name as country FROM Cities AS Ci INNER JOIN Countries AS Co ON Ci.country = Co.id ORDER BY Ci.id DESC"
+    );
+
     return res.json(result.recordset);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -32,6 +42,9 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       const result = await sql.query(`
         INSERT INTO Cities (name, country) 
         OUTPUT INSERTED.id
@@ -53,6 +66,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server Error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );
@@ -63,8 +79,11 @@ router.post(
 router.get("/:id", async (req, res) => {
   try {
     // Ensure the database connection is established
+    await connectDB();
+
+    // Ensure the database connection is established
     const result = await sql.query(
-      `SELECT * FROM Cities WHERE id = ${req.params.id}`
+      `SELECT Ci.id, Ci.name, Co.id as country FROM Cities AS Ci INNER JOIN Countries AS Co ON Ci.country = Co.id WHERE Ci.id = ${req.params.id}`
     );
 
     const city = result.recordset[0];
@@ -76,6 +95,9 @@ router.get("/:id", async (req, res) => {
     console.error(err.message);
 
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -84,6 +106,9 @@ router.get("/:id", async (req, res) => {
 // @access   Private
 router.delete("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `DELETE FROM Cities WHERE id = ${req.params.id}`
     );
@@ -95,6 +120,9 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -103,6 +131,9 @@ router.delete("/:id", async (req, res) => {
 // @access   Private
 router.put("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `UPDATE Cities SET name = '${req.body.name}', country = '${req.body.country}' WHERE id = ${req.params.id}`
     );
@@ -120,6 +151,9 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
+const connectDB = require("./../config/db");
 const sql = require("mssql");
 
 // @route    GET api/tournament
@@ -8,11 +9,19 @@ const sql = require("mssql");
 // @access   Public
 router.get("/", async (req, res) => {
   try {
-    const result = await sql.query("SELECT * FROM Tournaments");
+    // Ensure the database connection is established
+    await connectDB();
+
+    const result = await sql.query(
+      "SELECT T.id, T.name, T.start_date, T.end_date, S.name as sport FROM Tournaments AS T INNER JOIN Sports AS S ON T.sport = S.id  ORDER BY T.id DESC"
+    );
     return res.json(result.recordset);
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -36,10 +45,13 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
 
     try {
+      // Ensure the database connection is established
+      await connectDB();
+
       const result = await sql.query(`
         INSERT INTO Tournaments (name, sport, start_date, end_date, managed_by, description) 
         OUTPUT INSERTED.id
-        VALUES ('${req.body.name}', '${req.sport}', '${req.start_date}', '${req.end_date}', '${req.managed_by}', '${req.description}')
+        VALUES ('${req.body.name}', '${req.body.sport}', '${req.body.start_date}', '${req.body.end_date}', ${req.body.managed_by}, '${req.body.description}')
       `);
 
       // Check if recordset is undefined or empty
@@ -61,6 +73,9 @@ router.post(
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server Error");
+    } finally {
+      // Close the database connection
+      sql.close();
     }
   }
 );
@@ -71,8 +86,11 @@ router.post(
 router.get("/:id", async (req, res) => {
   try {
     // Ensure the database connection is established
+    await connectDB();
+
+    // Ensure the database connection is established
     const result = await sql.query(
-      `SELECT * FROM Tournaments WHERE id = ${req.params.id}`
+      `SELECT T.id, T.name, T.start_date, T.end_date, T.description, S.id as sport FROM Tournaments AS T INNER JOIN Sports AS S ON T.sport = S.id WHERE T.id = ${req.params.id}`
     );
 
     const tournament = result.recordset[0];
@@ -85,6 +103,9 @@ router.get("/:id", async (req, res) => {
     console.error(err.message);
 
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -93,6 +114,9 @@ router.get("/:id", async (req, res) => {
 // @access   Private
 router.delete("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `DELETE FROM Tournaments WHERE id = ${req.params.id}`
     );
@@ -104,6 +128,9 @@ router.delete("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
@@ -112,6 +139,9 @@ router.delete("/:id", async (req, res) => {
 // @access   Private
 router.put("/:id", async (req, res) => {
   try {
+    // Ensure the database connection is established
+    await connectDB();
+
     const result = await sql.query(
       `UPDATE tournaments SET 
         name = '${req.body.name}',
@@ -139,6 +169,9 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     console.error(err.message);
     return res.status(500).send("Server Error");
+  } finally {
+    // Close the database connection
+    sql.close();
   }
 });
 
