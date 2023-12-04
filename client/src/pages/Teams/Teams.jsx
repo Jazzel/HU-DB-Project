@@ -64,23 +64,23 @@ const Teams = () => {
           {teams.length > 0 &&
             teams.map((team, index) => {
               return (
-                <tr key={team._id}>
+                <tr key={team.id}>
                   <td>{index + 1}</td>
                   <td>{team.name}</td>
                   <td>{team.coach}</td>
-                  <td>{team.country.name}</td>
+                  <td>{team.country}</td>
                   <td>{team.state}</td>
                   <td>
                     <button className="btn btn-dark btn-sm">View</button> |{" "}
                     <Link
-                      to={`/teams/edit/${team._id}`}
+                      to={`/teams/edit/${team.id}`}
                       className="btn btn-warning btn-sm"
                     >
                       Edit
                     </Link>{" "}
                     |{" "}
                     <button
-                      onClick={() => handleDelete(team._id)}
+                      onClick={() => handleDelete(team.id)}
                       className="btn btn-danger btn-sm"
                     >
                       Delete

@@ -19,7 +19,7 @@ const CityForm = () => {
       const responseCountry = await axios.get(`/countries`);
       if (id) {
         const response = await axios.get(`/cities/${id}`);
-        setFormData({ ...response.data, country: response.data.country._id });
+        setFormData({ ...response.data, country: response.data.country.id });
       }
 
       setCountries(responseCountry.data);
@@ -36,17 +36,21 @@ const CityForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    let response;
-    if (!id) {
-      response = await axios.post(`/cities`, formData);
-    } else {
-      response = await axios.put(`/cities/${formData._id}`, formData);
-    }
-    if (response.status === 200) {
-      alert(id ? "City updated !" : "City added !");
-      navigate("/countries");
-    } else {
-      alert("Something went wrong !");
+    try {
+      let response;
+      if (!id) {
+        response = await axios.post(`/cities`, formData);
+      } else {
+        response = await axios.put(`/cities/${formData.id}`, formData);
+      }
+      if (response.status === 200) {
+        alert(id ? "City updated !" : "City added !");
+        navigate("/countries");
+      } else {
+        alert("Something went wrong !");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -91,7 +95,7 @@ const CityForm = () => {
           >
             <option value={""}>Select Country</option>
             {countries.map((country) => (
-              <option key={country._id} value={country._id}>
+              <option key={country.id} value={country.id}>
                 {country.name}
               </option>
             ))}

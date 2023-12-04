@@ -15,7 +15,7 @@ const TeamForm = () => {
       const responseCountry = await axios.get(`/countries`);
       if (id) {
         const response = await axios.get(`/teams/${id}`);
-        setFormData({ ...response.data, country: response.data.country._id });
+        setFormData({ ...response.data, country: response.data.country.id });
       }
       setCountries(responseCountry.data);
     } catch (error) {
@@ -44,7 +44,7 @@ const TeamForm = () => {
     if (!id) {
       response = await axios.post(`/teams`, formData);
     } else {
-      response = await axios.put(`/teams/${formData._id}`, formData);
+      response = await axios.put(`/teams/${formData.id}`, formData);
     }
     if (response.status === 200) {
       alert(id ? "Team updated !" : "Team added !");
@@ -108,7 +108,7 @@ const TeamForm = () => {
           >
             <option value={""}>Select Country</option>
             {countries.map((country) => (
-              <option key={country._id} value={country._id}>
+              <option key={country.id} value={country.id}>
                 {country.name}
               </option>
             ))}

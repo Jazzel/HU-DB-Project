@@ -20,8 +20,8 @@ const PlayerForm = () => {
         const response = await axios.get(`/players/${id}`);
         setFormData({
           ...response.data,
-          city: response.data.city._id,
-          team: response.data.team._id,
+          city: response.data.city.id,
+          team: response.data.team.id,
         });
       }
       setCities(responseCity.data);
@@ -53,7 +53,7 @@ const PlayerForm = () => {
     if (!id) {
       response = await axios.post(`/players`, formData);
     } else {
-      response = await axios.put(`/players/${formData._id}`, formData);
+      response = await axios.put(`/players/${formData.id}`, formData);
     }
     if (response.status === 200) {
       alert(id ? "Player updated !" : "Player added !");
@@ -118,7 +118,7 @@ const PlayerForm = () => {
           >
             <option value={""}>Select team</option>
             {teams.map((team) => (
-              <option key={team._id} value={team._id}>
+              <option key={team.id} value={team.id}>
                 {team.name}
               </option>
             ))}
@@ -149,7 +149,7 @@ const PlayerForm = () => {
           >
             <option value={""}>Select city</option>
             {cities.map((city) => (
-              <option key={city._id} value={city._id}>
+              <option key={city.id} value={city.id}>
                 {city.name}
               </option>
             ))}

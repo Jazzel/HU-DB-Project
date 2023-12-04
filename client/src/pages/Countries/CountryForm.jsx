@@ -33,17 +33,21 @@ const CountryForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    let response;
-    if (!id) {
-      response = await axios.post(`/countries`, formData);
-    } else {
-      response = await axios.put(`/countries/${formData._id}`, formData);
-    }
-    if (response.status === 200) {
-      alert(id ? "Country updated !" : "Country added !");
-      navigate("/countries");
-    } else {
-      alert("Something went wrong !");
+    try {
+      let response;
+      if (!id) {
+        response = await axios.post(`/countries`, formData);
+      } else {
+        response = await axios.put(`/countries/${formData.id}`, formData);
+      }
+      if (response.status === 200) {
+        alert(id ? "Country updated !" : "Country added !");
+        navigate("/countries");
+      } else {
+        alert("Something went wrong !");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

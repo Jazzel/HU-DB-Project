@@ -70,17 +70,17 @@ const Countries = () => {
               <tr key={city.id}>
                 <td>{index + 1}</td>
                 <td>{city.name}</td>
-                <td>{city.country.name}</td>
+                <td>{city.country}</td>
                 <td>
                   <Link
-                    to={`/cities/edit/${city._id}`}
+                    to={`/cities/edit/${city.id}`}
                     className="btn btn-warning btn-sm"
                   >
                     Edit
                   </Link>{" "}
                   |{" "}
                   <button
-                    onClick={() => handleDelete(city._id, "cities")}
+                    onClick={() => handleDelete(city.id, "cities")}
                     className="btn btn-danger btn-sm"
                   >
                     Delete
@@ -116,19 +116,19 @@ const Countries = () => {
         <tbody>
           {countries.length > 0 &&
             countries.map((country, index) => (
-              <tr key={country._id}>
+              <tr key={country.id}>
                 <td>{index + 1}</td>
                 <td>{country.name}</td>
                 <td>
                   <Link
-                    to={`/countries/edit/${country._id}`}
+                    to={`/countries/edit/${country.id}`}
                     className="btn btn-warning btn-sm"
                   >
                     Edit
                   </Link>{" "}
                   |{" "}
                   <button
-                    onClick={() => handleDelete(country._id, "countries")}
+                    onClick={() => handleDelete(country.id, "countries")}
                     className="btn btn-danger btn-sm"
                   >
                     Delete

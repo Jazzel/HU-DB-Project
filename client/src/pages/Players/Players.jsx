@@ -65,23 +65,23 @@ const Players = () => {
         <tbody>
           {players.length > 0 &&
             players.map((player, index) => (
-              <tr key={player._id}>
+              <tr key={player.id}>
                 <td>{index + 1}</td>
                 <td>{player.first_name + " " + player.last_name}</td>
-                <td>{player.team.name}</td>
+                <td>{player.team}</td>
                 <td>{player.age}</td>
-                <td>{player.city.name}</td>
+                <td>{player.city}</td>
                 <td>
                   <button className="btn btn-dark btn-sm">View</button> |{" "}
                   <Link
-                    to={`/players/edit/${player._id}`}
+                    to={`/players/edit/${player.id}`}
                     className="btn btn-warning btn-sm"
                   >
                     Edit
                   </Link>{" "}
                   |{" "}
                   <button
-                    onClick={() => handleDelete(player._id)}
+                    onClick={() => handleDelete(player.id)}
                     className="btn btn-danger btn-sm"
                   >
                     Delete

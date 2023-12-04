@@ -65,7 +65,7 @@ const Tournaments = () => {
           {tournaments.length > 0 &&
             tournaments.map((tournament, index) => {
               return (
-                <tr key={tournament._id}>
+                <tr key={tournament.id}>
                   <td>{index + 1}</td>
                   <td>{tournament.name}</td>
                   <td>{tournament.sport.name}</td>
@@ -74,14 +74,14 @@ const Tournaments = () => {
                   <td>
                     <button className="btn btn-dark btn-sm">View</button> |{" "}
                     <Link
-                      to={`/tournaments/edit/${tournament._id}`}
+                      to={`/tournaments/edit/${tournament.id}`}
                       className="btn btn-warning btn-sm"
                     >
                       Edit
                     </Link>{" "}
                     |{" "}
                     <button
-                      onClick={() => handleDelete(tournament._id)}
+                      onClick={() => handleDelete(tournament.id)}
                       className="btn btn-danger btn-sm"
                     >
                       Delete

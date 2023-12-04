@@ -16,7 +16,7 @@ const TournamentForm = () => {
       const responseSports = await axios.get(`/sports`);
       if (id) {
         const response = await axios.get(`/tournaments/${id}`);
-        setFormData({ ...response.data, sport: response.data.sport._id });
+        setFormData({ ...response.data, sport: response.data.sport.id });
       }
       setSports(responseSports.data);
     } catch (error) {
@@ -45,7 +45,7 @@ const TournamentForm = () => {
     if (!id) {
       response = await axios.post(`/tournaments`, formData);
     } else {
-      response = await axios.put(`/tournaments/${formData._id}`, formData);
+      response = await axios.put(`/tournaments/${formData.id}`, formData);
     }
     if (response.status === 200) {
       alert(id ? "Tournament updated !" : "Tournament added !");
@@ -96,7 +96,7 @@ const TournamentForm = () => {
           >
             <option value={""}>Select Country</option>
             {sports.map((sport) => (
-              <option key={sport._id} value={sport._id}>
+              <option key={sport.id} value={sport.id}>
                 {sport.name}
               </option>
             ))}
