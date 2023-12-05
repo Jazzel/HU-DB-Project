@@ -20,6 +20,27 @@ const Teams = () => {
     getData();
   }, []);
 
+  const [filter, setFilter] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+
+  const onChange = (e) => {
+    setSearch(e.target.value);
+    if (e.target.value !== "") {
+      setFilter(true);
+      const filteredData = teams.filter(
+        (match) =>
+          match?.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          match?.coach.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          match?.country.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          match?.state.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setFilteredData(filteredData);
+    } else {
+      setFilter(false);
+    }
+  };
+
   const handleDelete = async (id) => {
     console.log(id);
     const answer = window.confirm("Are you sure you want to delete ? ");
@@ -49,6 +70,14 @@ const Teams = () => {
         </div>
         <hr />
       </div>
+      <div className="d-flex justify-content-end mx-2 mb-3">
+        <input
+          className="form-control w-50"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => onChange(e)}
+        />
+      </div>
       <table className="table  table-responsive table-striped dataTables">
         <thead className="table-dark ">
           <tr>
@@ -61,40 +90,75 @@ const Teams = () => {
           </tr>
         </thead>
         <tbody>
-          {teams.length > 0 &&
-            teams.map((team, index) => {
-              return (
-                <tr key={team.id}>
-                  <td>{index + 1}</td>
-                  <td>{team.name}</td>
-                  <td>{team.coach}</td>
-                  <td>{team.country}</td>
-                  <td>{team.state}</td>
-                  <td>
-                    <Link
-                      to={`/teams/${team.id}/true`}
-                      className="btn btn-dark btn-sm"
-                    >
-                      View
-                    </Link>{" "}
-                    |{" "}
-                    <Link
-                      to={`/teams/edit/${team.id}`}
-                      className="btn btn-warning btn-sm"
-                    >
-                      Edit
-                    </Link>{" "}
-                    |{" "}
-                    <button
-                      onClick={() => handleDelete(team.id)}
-                      className="btn btn-danger btn-sm"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+          {!filter
+            ? teams.length > 0 &&
+              teams.map((team, index) => {
+                return (
+                  <tr key={team.id}>
+                    <td>{index + 1}</td>
+                    <td>{team.name}</td>
+                    <td>{team.coach}</td>
+                    <td>{team.country}</td>
+                    <td>{team.state}</td>
+                    <td>
+                      <Link
+                        to={`/teams/${team.id}/true`}
+                        className="btn btn-dark btn-sm"
+                      >
+                        View
+                      </Link>{" "}
+                      |{" "}
+                      <Link
+                        to={`/teams/edit/${team.id}`}
+                        className="btn btn-warning btn-sm"
+                      >
+                        Edit
+                      </Link>{" "}
+                      |{" "}
+                      <button
+                        onClick={() => handleDelete(team.id)}
+                        className="btn btn-danger btn-sm"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            : filteredData.length > 0 &&
+              filteredData.map((team, index) => {
+                return (
+                  <tr key={team.id}>
+                    <td>{index + 1}</td>
+                    <td>{team.name}</td>
+                    <td>{team.coach}</td>
+                    <td>{team.country}</td>
+                    <td>{team.state}</td>
+                    <td>
+                      <Link
+                        to={`/teams/${team.id}/true`}
+                        className="btn btn-dark btn-sm"
+                      >
+                        View
+                      </Link>{" "}
+                      |{" "}
+                      <Link
+                        to={`/teams/edit/${team.id}`}
+                        className="btn btn-warning btn-sm"
+                      >
+                        Edit
+                      </Link>{" "}
+                      |{" "}
+                      <button
+                        onClick={() => handleDelete(team.id)}
+                        className="btn btn-danger btn-sm"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
         </tbody>
       </table>
     </Layout>

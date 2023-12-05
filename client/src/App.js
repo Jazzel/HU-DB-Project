@@ -317,6 +317,14 @@ const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="matches/:id/:team_id/:player_id/playerDetails/:viewOnly"
+              element={
+                <PrivateRoute>
+                  <PlayerDetails />
+                </PrivateRoute>
+              }
+            />
           </Route>
         </Routes>
       </Wrapper>

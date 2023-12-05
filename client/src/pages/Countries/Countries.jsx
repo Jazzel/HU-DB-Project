@@ -34,6 +34,41 @@ const Countries = () => {
     }
   };
 
+  const [filterCity, setFilterCity] = useState(false);
+  const [filterCountry, setFilterCountry] = useState(false);
+  const [searchCity, setSearchCity] = useState("");
+  const [searchCountry, setSearchCountry] = useState("");
+  const [filteredCities, setFilteredCities] = useState([]);
+  const [filteredCountries, setFilteredCountries] = useState([]);
+
+  const onCityChange = (e) => {
+    setSearchCity(e.target.value);
+    if (e.target.value !== "") {
+      setFilterCity(true);
+      const filteredData = cities.filter(
+        (data) =>
+          data?.name.toLowerCase().includes(e.target.value.toLowerCase()) ||
+          data?.country.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setFilteredCities(filteredData);
+    } else {
+      setFilterCity(false);
+    }
+  };
+
+  const onCountryChange = (e) => {
+    setSearchCountry(e.target.value);
+    if (e.target.value !== "") {
+      setFilterCountry(true);
+      const filteredData = countries.filter((data) =>
+        data?.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setFilteredCountries(filteredData);
+    } else {
+      setFilterCountry(false);
+    }
+  };
+
   useEffect(() => {
     getData();
   }, []);
@@ -55,6 +90,14 @@ const Countries = () => {
         </div>
         <hr />
       </div>
+      <div className="d-flex justify-content-end mx-2 mb-3">
+        <input
+          className="form-control w-50"
+          placeholder="Search"
+          value={searchCity}
+          onChange={(e) => onCityChange(e)}
+        />
+      </div>
       <table className="table  table-responsive table-striped dataTables">
         <thead className="table-dark ">
           <tr>
@@ -65,29 +108,53 @@ const Countries = () => {
           </tr>
         </thead>
         <tbody>
-          {cities.length > 0 &&
-            cities.map((city, index) => (
-              <tr key={city.id}>
-                <td>{index + 1}</td>
-                <td>{city.name}</td>
-                <td>{city.country}</td>
-                <td>
-                  <Link
-                    to={`/cities/edit/${city.id}`}
-                    className="btn btn-warning btn-sm"
-                  >
-                    Edit
-                  </Link>{" "}
-                  |{" "}
-                  <button
-                    onClick={() => handleDelete(city.id, "cities")}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {!filterCity
+            ? cities.length > 0 &&
+              cities.map((city, index) => (
+                <tr key={city.id}>
+                  <td>{index + 1}</td>
+                  <td>{city.name}</td>
+                  <td>{city.country}</td>
+                  <td>
+                    <Link
+                      to={`/cities/edit/${city.id}`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </Link>{" "}
+                    |{" "}
+                    <button
+                      onClick={() => handleDelete(city.id, "cities")}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            : filteredCities.length > 0 &&
+              filteredCities.map((city, index) => (
+                <tr key={city.id}>
+                  <td>{index + 1}</td>
+                  <td>{city.name}</td>
+                  <td>{city.country}</td>
+                  <td>
+                    <Link
+                      to={`/cities/edit/${city.id}`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </Link>{" "}
+                    |{" "}
+                    <button
+                      onClick={() => handleDelete(city.id, "cities")}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
       <div className="row">
@@ -105,6 +172,14 @@ const Countries = () => {
         </div>
         <hr />
       </div>
+      <div className="d-flex justify-content-end mx-2 mb-3">
+        <input
+          className="form-control w-50"
+          placeholder="Search"
+          value={searchCountry}
+          onChange={(e) => onCountryChange(e)}
+        />
+      </div>
       <table className="table  table-responsive table-striped dataTables">
         <thead className="table-dark ">
           <tr>
@@ -114,28 +189,51 @@ const Countries = () => {
           </tr>
         </thead>
         <tbody>
-          {countries.length > 0 &&
-            countries.map((country, index) => (
-              <tr key={country.id}>
-                <td>{index + 1}</td>
-                <td>{country.name}</td>
-                <td>
-                  <Link
-                    to={`/countries/edit/${country.id}`}
-                    className="btn btn-warning btn-sm"
-                  >
-                    Edit
-                  </Link>{" "}
-                  |{" "}
-                  <button
-                    onClick={() => handleDelete(country.id, "countries")}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {!filterCountry
+            ? countries.length > 0 &&
+              countries.map((country, index) => (
+                <tr key={country.id}>
+                  <td>{index + 1}</td>
+                  <td>{country.name}</td>
+                  <td>
+                    <Link
+                      to={`/countries/edit/${country.id}`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </Link>{" "}
+                    |{" "}
+                    <button
+                      onClick={() => handleDelete(country.id, "countries")}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            : filteredCountries.length > 0 &&
+              filteredCountries.map((country, index) => (
+                <tr key={country.id}>
+                  <td>{index + 1}</td>
+                  <td>{country.name}</td>
+                  <td>
+                    <Link
+                      to={`/countries/edit/${country.id}`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </Link>{" "}
+                    |{" "}
+                    <button
+                      onClick={() => handleDelete(country.id, "countries")}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </Layout>

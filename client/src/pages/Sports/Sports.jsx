@@ -21,6 +21,23 @@ const Sports = () => {
     getData();
   }, []);
 
+  const [filter, setFilter] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+
+  const onChange = (e) => {
+    setSearch(e.target.value);
+    if (e.target.value !== "") {
+      setFilter(true);
+      const filteredData = sports.filter((match) =>
+        match?.name.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+      setFilteredData(filteredData);
+    } else {
+      setFilter(false);
+    }
+  };
+
   const handleDelete = async (id) => {
     console.log(id);
     const answer = window.confirm("Are you sure you want to delete ? ");
@@ -51,6 +68,14 @@ const Sports = () => {
         </div>
         <hr />
       </div>
+      <div className="d-flex justify-content-end mx-2 mb-3">
+        <input
+          className="form-control w-50"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => onChange(e)}
+        />
+      </div>
       <table className="table table-responsive table-striped dataTables">
         <thead className="table-dark ">
           <tr>
@@ -60,35 +85,65 @@ const Sports = () => {
           </tr>
         </thead>
         <tbody>
-          {sports.length > 0 &&
-            sports.map((sport, index) => (
-              <tr key={sport.id}>
-                <td>{index + 1}</td>
-                <td>{sport.name}</td>
-                <td>
-                  <Link
-                    to={`/sports/${sport.id}/true`}
-                    className="btn btn-dark btn-sm"
-                  >
-                    View
-                  </Link>{" "}
-                  |{" "}
-                  <Link
-                    to={`/sports/edit/${sport.id}`}
-                    className="btn btn-warning btn-sm"
-                  >
-                    Edit
-                  </Link>{" "}
-                  |{" "}
-                  <button
-                    onClick={() => handleDelete(sport.id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {!filter
+            ? sports.length > 0 &&
+              sports.map((sport, index) => (
+                <tr key={sport.id}>
+                  <td>{index + 1}</td>
+                  <td>{sport.name}</td>
+                  <td>
+                    <Link
+                      to={`/sports/${sport.id}/true`}
+                      className="btn btn-dark btn-sm"
+                    >
+                      View
+                    </Link>{" "}
+                    |{" "}
+                    <Link
+                      to={`/sports/edit/${sport.id}`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </Link>{" "}
+                    |{" "}
+                    <button
+                      onClick={() => handleDelete(sport.id)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            : filteredData.length > 0 &&
+              filteredData.map((sport, index) => (
+                <tr key={sport.id}>
+                  <td>{index + 1}</td>
+                  <td>{sport.name}</td>
+                  <td>
+                    <Link
+                      to={`/sports/${sport.id}/true`}
+                      className="btn btn-dark btn-sm"
+                    >
+                      View
+                    </Link>{" "}
+                    |{" "}
+                    <Link
+                      to={`/sports/edit/${sport.id}`}
+                      className="btn btn-warning btn-sm"
+                    >
+                      Edit
+                    </Link>{" "}
+                    |{" "}
+                    <button
+                      onClick={() => handleDelete(sport.id)}
+                      className="btn btn-danger btn-sm"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </Layout>

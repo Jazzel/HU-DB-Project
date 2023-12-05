@@ -140,6 +140,12 @@ const MatchDetails = () => {
                       >
                         <p>{player.first_name}</p>
                         <Link
+                          to={`/matches/${id}/${player.team_id}/${player.id}/playerDetails/true`}
+                          className="btn btn-sm btn-dark float-left mx-4"
+                        >
+                          View details
+                        </Link>
+                        <Link
                           to={`/matches/${id}/${player.team_id}/${player.id}/playerDetails`}
                           className="btn btn-sm btn-dark float-left mx-4"
                         >
@@ -159,6 +165,12 @@ const MatchDetails = () => {
                         className="d-flex justify-content-start align-items-center"
                       >
                         <p>{player.first_name}</p>
+                        <Link
+                          to={`/matches/${id}/${player.team_id}/${player.id}/playerDetails/true`}
+                          className="btn btn-sm btn-dark float-left mx-4"
+                        >
+                          View details
+                        </Link>
                         <Link
                           to={`/matches/${id}/${player.team_id}/${player.id}/playerDetails`}
                           className="btn btn-sm btn-dark float-left mx-4"

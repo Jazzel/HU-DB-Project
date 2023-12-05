@@ -109,7 +109,7 @@ const PlayerDetails = () => {
         </div>
         <div className="col-3 d-flex justify-content-end align-items-center">
           <Link
-            to={`/matches/edit/${id}`}
+            to={`/matches/${id}/matchDetails`}
             className="btn btn-outline-light mr-0"
           >
             <FontAwesomeIcon icon={faChevronLeft} /> Go Back
