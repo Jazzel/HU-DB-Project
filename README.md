@@ -96,7 +96,7 @@ Before running the project, make sure you have the following installed:
   `  yarn server`
   This will start the server on localhost with port 5000.
 
-Verify by opening browser and go to [http:\\localhost:5000](http:\localhost:5000). You will see Hello World as a response on plain HTML page.
+Verify by opening browser and go to [http://localhost:5000](http://localhost:5000). You will see Hello World as a response on plain HTML page.
 
 ### Running Frontend:
 
@@ -108,7 +108,7 @@ Verify by opening browser and go to [http:\\localhost:5000](http:\localhost:5000
   ```
   yarn start
   ```
-  This will start the frontend development server on [http:\\localhost:3000](http:\localhost:3000), and you will see the login page once the build is complete.
+  This will start the frontend development server on [http:\\localhost:3000](http://localhost:3000), and you will see the login page once the build is complete.
 
 ### Running both together
 
