@@ -93,7 +93,7 @@ router.get("/:id", async (req, res) => {
       `SELECT P.id, P.first_name, P.last_name, T.id as team, T.name as team_name, P.age, C.id as city, P.description FROM Players AS P INNER JOIN Teams AS T ON P.team = T.id INNER JOIN Cities as C ON P.city = C.id WHERE P.id = ${req.params.id}`
     );
 
-    const player = result.recordset[0];
+    const player = result.recordset[0]; //the query returns data
 
     if (!player) return res.status(404).json({ msg: "Player not found" });
 

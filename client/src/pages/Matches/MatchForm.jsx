@@ -24,8 +24,8 @@ const MatchForm = () => {
     tournament: "",
     team_A: "",
     team_B: "",
-    team_A_score: "",
-    team_B_score: "",
+    team_A_score: 0,
+    team_B_score: 0,
     winner: "",
     summary: "",
     date: "",
@@ -59,7 +59,7 @@ const MatchForm = () => {
         (team) => team.id === formData.team_A || team.id === formData.team_B
       )
     );
-  }, [formData.team_A, formData.team_B, teams, id]);
+  }, [id]);
 
   const navigate = useNavigate();
 
@@ -242,7 +242,7 @@ const MatchForm = () => {
             value={formData.winner}
           >
             <option value={""}>Select winner team</option>
-            {winnerTeams.map((team) => (
+            {teams.map((team) => (
               <option key={team.id} value={team.id}>
                 {team.name}
               </option>
